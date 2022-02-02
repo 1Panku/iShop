@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css">
+    <link rel="shortcut icon" href="../Shop/Image/favicon.ico">
+    <title>Twisha Online Shopping</title>
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script>
+        $(function () {
+            $("#btnRegister").click(function () {
+
+                var gen = $('input[name=gender]:checked', '#registerF').val();
+                var custDetails = {
+
+                    firstname: $("#txtFirstName").val(),
+                    lastname: $("#txtLastName").val(),
+                    Dob: $("#txtDate").val(),
+                    mobile: $("#txtMob").val(),
+                    gender: gen,
+                    password: $("#txtPwd1").val(),
+                    email: $("#txtEmail").val(),
+                    address1: $("#txtAdd1").val(),
+                    address2: $("#txtAdd2").val(),
+                    pin_code: $("#txtPin").val(),
+                    state: $("#txtState").val(),
+                    country: $("#txtCountry").val()
+                };
+                $.ajax({
+                    method: "POST",
+                    url: "http://127.0.0.1:3030/customers/register",
+                    data: custDetails
+                });
+                alert("You Are Successfully Registered");
+                location.href = "login.html";
+
+            });
+
+
+
+            $(document).ready(function () {
+                $("input[type=text]").keyup(function () {
+                    $(this).val($(this).val().toUpperCase());
+                });
+            });
+
+
+
+
+
+
+            function f1() {
+                {
+                    if ($("#txtFirstName").val() == "" || $("#txtLastName").val() == "" || $("#txtMob").val() == "" || $("#txtPwd1").val() == "" || $("#txtEmail").val() == "" || $("#txtAdd1").val() == "" || $("#txtAdd2").val() == "" || $("#txtPin").val() == "" || $("#txtState").val() == "" || $("#txtCountry").val() == "") {
+                        $("#btnRegister").prop('disabled', true);
+
+                    } else {
+                        $('#btnRegister').prop('disabled', false);
+
+                    }
+                }
+                setInterval(f1, 1000);
+            }
+            f1();
+        })
+    </script>
+</head>
+
+<body class="container-fluid">
+    <div class="row row-sm">
+        <h1 class="text-center bg-warning p-2">Twisha's Online Store</h1>
+        <div class="col-8 col-sm-8 me-5 ms-5 mb-5 ">
+            <div class="m-2">
+                <form class="form-control d-flex justify-content-evenly " id="registerF">
+                    
+                    <div class="w-100 m-3">
+                        <dl>
+                            <h3 class="text-primary text-decoration-underline" >Customer Registration Form:</h3>
+                            
+                            <dt>*First Name:</dt>
+                            <dd><input type="text" class="form-control" id="txtFirstName"></dd>
+                            <dt>*Last Name:</dt>
+                            <dd><input type="text" class="form-control" id="txtLastName"></dd>
+                            <dt>*Date of Birth:</dt>
+                            <dd><input class="form-control" type="date" id="txtDate"></dd>
+                            <dt class="form-label">*Select Gender:</dt>
+                            <dd>
+                                <input type="radio" name="gender" class="form-check-input" id="Male" value="Male"> Male
+                                <input type="radio" name="gender" class="form-check-input" id="Female" value="Female">
+                                Female
+                            </dd>
+
+                            <dt>*Mobile Number:</dt>
+                            <dd><input type="tel" class="form-control" id="txtMob" maxlength="10"></dd>
+                            <dt>*Email-Id:</dt>
+                            <dd><input type="email" class="form-control" id="txtEmail"></dd>
+                            <dt>*Create Password:</dt>
+                            <dd><input type="password" class="form-control" id="txtPwd1"></dd>
+
+                        </dl>
+                    </div>
+                    <div class="w-100 m-2">
+                        <dd class="mb-2 text-danger text-center" style="font-size: 13px;">* Indicates All Fields Are
+                            Mandatory To Fill</dd>
+                        <dl style="margin-top: 30px;">
+                            
+                            <dt>*Address 1:</dt>
+                            <dd><input type="text" class="form-control" id="txtAdd1"></dd>
+                            <dt>*Addreess 2:</dt>
+                            <dd><input type="text" class="form-control" id="txtAdd2"></dd>
+                            <dt>*Pin code:</dt>
+                            <dd><input type="text" class="form-control" id="txtPin" maxlength="6"></dd>
+                            <dt>*State:</dt>
+                            <dd><input type="text" class="form-control" id="txtState"></dd>
+
+                            <dt>*Country:</dt>
+                            <dd><input type="text" class="form-control" id="txtCountry"></dd>
+
+                            <button id="btnRegister" class="btn btn-warning w-100"><b>Registration</b></button>
+
+                            <p class="mt-4">Already have an account? <a href="login.html">Sign-In</a></p>
+
+                        </dl>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="col-3 col-sm-3 mt-5">
+            <button class="btn btn-warning "><b><a class="text-decoration-none text-dark" href="Myshop.html">Back to
+                        Home</a></b></button>
+
+        </div>
+    </div>
+</body>
+
+</html>

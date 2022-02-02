@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css">
+    <link rel="shortcut icon" href="../Shop/Image/favicon.ico">
+    <title>Twisha Online Shopping</title>
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script>
+        $(function () {
+            $("#btnRegister").click(function () {
+                var productId= parseInt($("#txtId").val());
+                 var pPrice = parseFloat($("#txtPrice").val());
+                
+                var productDetails = {
+
+                    id: productId,
+                    title: $("#txtTitle").val(),
+                    price: pPrice,
+                    description: $("#txtDesc").val(),
+                    category: $("#txtCat").val(),
+                    image: $("#txtImg").val(),
+                   
+
+                };
+                $.ajax({
+                    method: "POST",
+                    url: "http://127.0.0.1:3030/products/register",
+                    data: productDetails
+                });
+                alert("Product Successfully Added");
+                location.href = "AdminShop.html";
+
+            });
+
+
+
+           
+
+
+
+            function f1() {
+                {
+                    if ($("#txtId").val() == "" || $("#txtTitle").val() == "" || $("#txtCat").val() == "" || $("#txtImg").val() == "" ) {
+                        $("#btnRegister").prop('disabled', true);
+
+                    } else {
+                        $('#btnRegister').prop('disabled', false);
+
+                    }
+                }
+                setInterval(f1, 1000);
+            }
+            f1();
+        })
+    </script>
+</head>
+
+<body class="container-fluid ">
+    <div class="row row-sm">
+        <h1 class="text-center bg-warning p-2">Twisha's Online Store</h1>
+        <div class="col-8 col-sm-8 m-3">
+
+
+
+            <div class="w-50 border border-1 p-3 rounded-3" style="margin-left:420px;">
+                <dl>
+                    <dd class="mb-2 text-danger text-center" style="font-size: 13px;">* Indicates All Fields Are
+                        Mandatory To Fill</dd>
+                    <h3 class="text-primary text-decoration-underline">New Products Registration:</h3>
+
+                    <dt>*Id:</dt>
+                    <dd><input type="number" class="form-control" id="txtId"></dd>
+                    <dt>*Title:</dt>
+                    <dd><input type="text" class="form-control" id="txtTitle"></dd>
+
+                    <dt>*Price:</dt>
+                    <dd><input type="number" class="form-control" id="txtPrice"></dd>
+                    <dt>*Description:</dt>
+                    <dd><input type="text" class="form-control" id="txtDesc"></dd>
+                    <dt>*Category:</dt>
+                    <select id="txtCat" class="form-select">
+                        
+                        <option>electronics</option>
+                        <option>jewelery</option>
+                        <option>men's clothing</option>
+                        <option>women's clothing</option>
+                        <option>footwear</option>
+                    </select>
+                    <dt>*Photo:</dt>
+                    <dd><input type="text" class="form-control" id="txtImg"></dd>
+                   
+
+                    <button id="btnRegister" class="btn btn-warning w-100"><b>Add Product to Shop</b></button>
+
+
+
+                </dl>
+            </div>
+
+
+
+
+        </div>
+        <div class="col-3 col-sm-3 mt-5">
+            <button class="btn btn-warning "><b><a class="text-decoration-none text-dark" href="AdminShop.html">Back to
+                        Home</a></b></button>
+
+        </div>
+    </div>
+</body>
+
+</html>

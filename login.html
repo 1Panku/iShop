@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css">
+    <link rel="shortcut icon" href="../Shop/Image/favicon.ico">
+    <title>Twisha Online Shopping</title>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+
+    <style>
+        #policy {
+            font-size: 13px;
+        }
+
+        #Em {
+            font-size: 13px;
+            color: orange;
+        }
+    </style>
+    <script>
+        $(function () {
+
+
+          
+
+            $("#btnLogin").click(function () {
+
+                $.ajax({
+                    method: "GET",
+                    url: "http://127.0.0.1:3030/customers",
+                    success: function (data) {
+                        $.each(data, function (key, user) {
+
+
+                            if ((user.email == $("#txtEmail").val() || user.mobile == $("#txtEmail").val()) && user.password == $("#txtPwd").val()) {
+                                alert(`${user.firstname} ${user.lastname} You Are Login Successfully..!!`);
+                                location.href = "Myshop.html";
+                                $("#err").html = disabled;
+                                
+                            }
+
+                            else {
+
+                                $("#err").html("  Email / Password Should Not be Empty.").attr('class','bi bi-exclamation-triangle');
+
+                            }
+                        })
+                    }
+                })
+            })
+
+
+        })
+
+
+    </script>
+</head>
+
+<body class="container-fluid">
+
+
+    <h1 class="text-center">Twisha's Online Store</h1>
+
+    <div class="m-2 d-flex justify-content-center align-items-center" style="height: 500px;">
+
+
+        <dl class="w-25 border p-4 rounded-3">
+            
+            <h3>Sign-In</h3>
+            <dt>Email or Mobile Number:</dt>
+            <dd><input type="text" required class="form-control" id="txtEmail"></dd>
+
+            <dt>Password:</dt>
+            <dd><input type="password" required class="form-control" id="txtPwd"></dd> 
+             <span id="err" class="mb-3 " style="color: red;"></span><br>
+        </span>
+            <button id="btnLogin" class="btn btn-warning w-100 mt-3 mb-3"><b>Login</b></button>
+
+            <p id="policy">By continuing, you agree to Shopping <a href="#">Conditions of Use</a> and <a
+                    href="#">Privacy Notice</a>.</p>
+            <p class="mt-4">New User? Please <a href="Myaccount.html">Sign-Up</a></p>
+
+        </dl>
+
+        </form>
+
+    </div>
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css">
+    <link rel="shortcut icon" href="../Shop/Image/favicon.ico">
+    <title>Twisha Online Shopping</title>
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script>
+        $(function () {
+            $("#btnRegister").click(function () {
+
+                var adminDetails = {
+
+                    firstname: $("#txtFirstName").val(),
+                    lastname: $("#txtLastName").val(),
+                    mobile: $("#txtMob").val(),
+                    password: $("#txtPwd1").val(),
+                    email: $("#txtEmail").val(),
+
+                };
+                $.ajax({
+                    method: "POST",
+                    url: "http://127.0.0.1:3030/Admin/register",
+                    data: adminDetails
+                });
+                alert("You Are Successfully Registered");
+                location.href = "Adminlogin.html";
+
+            });
+
+
+
+            $(document).ready(function () {
+                $("input[type=text]").keyup(function () {
+                    $(this).val($(this).val().toUpperCase());
+                });
+            });
+
+
+
+
+
+
+            function f1() {
+                {
+                    if ($("#txtFirstName").val() == "" || $("#txtLastName").val() == "" || $("#txtMob").val() == "" || $("#txtPwd1").val() == "" || $("#txtEmail").val() == "") {
+                        $("#btnRegister").prop('disabled', true);
+
+                    } else {
+                        $('#btnRegister').prop('disabled', false);
+
+                    }
+                }
+                setInterval(f1, 1000);
+            }
+            f1();
+        })
+    </script>
+</head>
+
+<body class="container-fluid " >
+    <div class="row row-sm">
+        <h1 class="text-center bg-warning p-2">Twisha's Online Store</h1>
+        <div class="col-8 col-sm-8 m-3"  >
+
+
+
+            <div class="w-50 border border-1 p-3 rounded-3" style="margin-left:420px;">
+                <dl>
+                    <dd class="mb-2 text-danger text-center" style="font-size: 13px;">* Indicates All Fields Are
+                        Mandatory To Fill</dd>
+                    <h3 class="text-primary text-decoration-underline">Admin Registration Form:</h3>
+
+                    <dt>*First Name:</dt>
+                    <dd><input type="text" class="form-control" id="txtFirstName"></dd>
+                    <dt>*Last Name:</dt>
+                    <dd><input type="text" class="form-control" id="txtLastName"></dd>
+
+
+                    <dt>*Mobile Number:</dt>
+                    <dd><input type="tel" class="form-control" id="txtMob" maxlength="10"></dd>
+                    <dt>*Email-Id:</dt>
+                    <dd><input type="email" class="form-control" id="txtEmail"></dd>
+                    <dt>*Create Password:</dt>
+                    <dd><input type="password" class="form-control" id="txtPwd1"></dd>
+                   
+                    <button id="btnRegister" class="btn btn-warning w-100"><b>Registration</b></button>
+
+                    <p class="mt-4">Already have an account? <a href="Adminlogin.html">Sign-In</a></p>
+
+
+                </dl>
+            </div>
+
+
+
+
+        </div>
+        <div class="col-3 col-sm-3 mt-5">
+            <button class="btn btn-warning "><b><a class="text-decoration-none text-dark" href="AdminShop.html">Back to
+                        Home</a></b></button>
+
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css">
+    <link rel="shortcut icon" href="../Shop/Image/favicon.ico">
+    <title>Twisha Online Shopping</title>
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <style>
+       
+    </style>
+
+
+
+    <script type="text/javascript">
+        $(function () {
+
+
+            $.ajax({
+                method: "get",
+                url: "http://127.0.0.1:3030/products/categories",
+                success: function (response) {
+
+                    $.each(response, function (key, val) {
+
+                        $(`<option>${val.categoryName.toUpperCase()}</option>`).appendTo("#lstCategories");
+
+                    })
+                }
+            })
+
+            function LoadProducts(url) {
+                $.ajax({
+                    method: "get",
+                    url: url,
+                    success: function all(response) {
+                        $.each(response, function (key, val) {
+                            $(`
+                                <div class="card border-0 m-4" id="card">
+                                        <a href="javascript:void()">
+                                            <img class="card-img-top" src=${val.image} height="140px" id="${val.id}">
+                                        </a>
+
+                                    <div class="card-body">
+                                        <p><b>Title:</b> ${val.title}</p>
+                                        <p><b>Price:</b>  ${val.price} &#8377;</p>
+                                        
+                                    </div>
+                                </div>
+                             `).appendTo("#all").css("width", "150px");
+                        });
+                    }
+                })
+            }
+
+            $(document).ready(function () {
+                LoadProducts("http://127.0.0.1:3030/products");
+            })
+
+            $("#lstCategories").change(function () {
+                $("#all").html("");
+                var lstCategories = $("#lstCategories").val();
+
+                if (lstCategories == "ALL CATEGORIES") {
+                    LoadProducts("http://127.0.0.1:3030/products");
+                }
+                else {
+                    LoadProducts(`http://127.0.0.1:3030/products/categories/${lstCategories}`);
+                }
+            })
+
+
+
+            $("#addProduct").click(function(){
+                location.href="productAdd.html";
+            })
+
+
+
+
+
+
+
+
+            $(document).on("click", "img", function (event) {
+                var id = event.target.id;
+                $("#all").html("");
+                $.ajax({
+                    method: "get",
+                    url: `http://127.0.0.1:3030/products/${id}`,
+                    success: function All(data) {
+                        $.each(data, function (key, val) {
+
+                            $(`
+                            
+                            <div class="row d-flex justify-content-center mt-2 w-100" style="height:500px">
+                                <div class="col m-5"> <img src=${val.image} height="300" width="300">
+                                </div>    
+                                <div class="col">
+                                
+                               
+                                <dl class="mt-5">
+                                                                       
+                                    <h3>${val.title} </h3>
+                                    <dt>Product Description:</dt>
+                                    <dd>${val.description}</dd>
+                                    <h5>Product Price: ${val.price} &#8377;</h5>
+                                    <dd>Rating: ${val.rating.rate} <span  class="text-warning bi bi-star-fill"></span></dd>
+                                </dl>                           
+                                
+                                <button class="btn btn-primary cartItems" id=${val.id}><span class="bi bi-cart"></span> Add to Cart</button>
+                                <button class="btn btn-link" id="btnHome">Back To Home</button>
+                             </div>   
+                            
+                                
+                            </div>    
+                        `).appendTo("#all");
+                        })
+                    }
+
+                })
+            })
+
+
+            $(document).on("click", "#btnHome", function () {
+                $("#all").html("");
+                $("#hide").html("");
+                LoadProducts("http://127.0.0.1:3030/products");
+            })
+
+
+            $("#btnTerm").click(function () {
+                $("#all").html("");
+                $("#hide").html("");
+                $(`
+                    <div>
+                        <h3>Conditions of Use</h3>
+                        <p>Put here your Conditions of Use information.</p>
+                    </div>
+                 
+                 `).appendTo("#all");
+            })
+
+
+
+
+            $("#btnFind").click(function(){
+                 $("#all").html("");
+                var findProduct = $("#findProduct").val().toLowerCase();
+                $.ajax({
+                    method:"get",
+                    url:`http://127.0.0.1:3030/products/by/${findProduct}`,
+                    success:function(response){
+                        $.each(response,function(key, val){
+                            $(`
+                            <div class="w-100 d-flex justify-content-between m-4 flex-wrap">
+                                <p>Product Id: ${val.id}</p>
+                                <img height="400" width="400" src=${val.image}>
+                                <p>Product Price: ${val.price}</p>
+                            </div>
+                            <div class="float-start">
+                                <button class="btn btn-primary cartItems" id=${val.id}><span class="bi bi-cart"></span> Add to Cart</button>
+                            </div>
+                            `).appendTo("#all");
+                        })
+                    }
+                })
+             })
+
+
+
+
+
+            var cartProducts = [];
+            $(document).on("click", ".cartItems", function (event) {
+                var id = event.target.id;
+                $.ajax({
+                    method: "get",
+                    url: `http://127.0.0.1:3030/products/${id}`,
+                    success: function All(response) {
+                        $.each(response, function (key, val) {
+                            cartProducts.unshift(val);
+                            $("#cartItem").html(cartProducts.length);
+                        })
+                        alert("Product Added to Your Cart..!!");
+                    }
+                })
+            })
+
+
+
+            $("#cartItemsShowModal").click(function () {
+                $("#ItemsShow").show();
+                $("tbody").html("");
+                $.each(cartProducts, function (key, value) {
+                    $(`
+                        <tr>
+                            <td>
+                                <img src=${value.image} height="50" width="50">
+                            </td> 
+                            <td>${value.id}</td>    
+                            <td>${value.category}</td>    
+                            <td>${value.price}</td>    
+                               
+                        </tr>
+                     `).appendTo("tbody");
+                })
+            })
+
+
+
+            $("#btnCartItemClose").click(function () {
+                $("#ItemsShow").hide();
+            })
+
+
+
+            $("#clos").click(function () {
+                $("#ItemsShow").hide();
+            })
+
+
+
+
+
+        })
+
+    </script>
+
+</head>
+
+<body class="container-fluid border-warning border border-5 " >
+    <div>
+        <div class=" d-flex justify-content-between bg-warning  mt-2 ">
+            <span><img src="./Image/logo.PNG" height="60" width="80"></span>
+            <span><button class="btn bg-white mt-2" id="addProduct"><b>Add New Products</b></button></span>
+            <span>
+                <h1 class="text-center">Twisha Online Store<span class="bi bi-cart4"></span> </h1>
+            </span>
+
+            <span class="m-1 p-1">
+
+                <nav class="navbar navbar-expand-sm navbar-dark rounded">
+                    <div class="container-fluid">
+                        <button class="navbar-toggler bg-danger" data-bs-toggle="collapse" data-bs-target="#menu">
+                            <span class="navbar-toggler-icon "></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="menu">
+                            <ul class=" navbar-nav ms-auto me-5">
+                                <li class="navbar-item">
+
+                                <li class="dropdown">
+                                    <a href="#"
+                                        class=" text-dark bg-white p-2 rounded dropdown-toggle text-decoration-none "
+                                        data-bs-toggle="dropdown">
+                                        <span class="fas fa-sign-in-alt"></span>
+                                        My Account</a>
+                                    <ul class="dropdown-menu">
+                                       
+                                        <li class="dropdown-item">
+                                            <a href="Adminlogin.html" class="text-decoration-none text-dark"><span
+                                                    class="fas fa-lock"></span>
+                                                Admin Login</a>
+
+                                        </li>
+                                        <li class="dropdown-divider"></li>
+                                        <li class="dropdown-item">
+                                            <a href="logout.html" class="text-decoration-none text-dark">
+                                                <span class="fas fa-sign-out-alt"></span> Logout</a>
+
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                </li>
+
+                            </ul>
+                        </div>
+
+
+                    </div>
+                </nav>
+            </span>
+        </div>
+        <div class="row row-sm mt-3">
+            <div class="col-2 col-sm-2 border-end">
+                <h5 class="m-1 text-center">Select Categories</h5>
+                <select class="form-select m-1" id="lstCategories">
+
+                </select>
+                <div>
+
+                    <div>
+                        <div class="  d-flex justify-content-center bg-warning mt-5" >
+                            <span><b>What's new</b></span>
+                        </div>
+
+                        <aside>
+                            <figure>
+                                <img src="" alt="">
+                                <figcaption class="">
+                                    <div align="center">
+                                        <img src="../public/images/shirt.jpg" height="200" width="100%" alt="">
+                                    </div>
+                                    <div align="center">
+                                        <span class="d-block">Shirt</span>
+                                        <span class="d-block">1499.00 &#8377;</span>
+                                    </div>
+                                </figcaption>
+                            </figure>
+                        </aside>
+                    </div>
+
+                    <div class="bg-warning d-flex justify-content-center flex-wrap ">
+                        <span ><b>Information</b></span>
+                    </div>
+
+                    <div class="d-flex justify-content-center p-2">
+                        <button class="btn btn-link text-decoration-none text-dark" id="btnTerm">
+                            Shipping & Returns<br>
+                            Privacy Notice<br>
+                            Conditions of Use<br>
+                            Contact Us
+                        </button>
+
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-8 col-sm-8 d-flex justify-content-center flex-wrap " style="height: 600px;">
+                <div class="input-group mt-2 p-2 w-100" style="height: 50px; position: relative; top: 0;">
+                    <input type="text" class="form-control" id="findProduct">
+                    <button class="btn btn-warning "  id="btnFind"><span class="bi bi-search"></span></button>
+                </div>
+                <div class="d-flex justify-content-center flex-wrap overflow-scroll w-100" style="height: 550px;"
+                    id="all">
+
+                </div>
+
+            </div>
+            <div class="col-2 col-sm-2 border-start">
+                <button class="w-100 btn bg-warning bi bi-cart4"  id="cartItemsShowModal"> <b>Your Cart Items</b>
+                    <b>[<span id="cartItem"></span>]</b> </button>
+                <div class="mt-5" style="height: 100px;">
+                    <div class="bg-warning d-flex justify-content-center" >
+                        <span><b>We Accept</b></span>
+                    </div>
+                    <div class="mt-1 d-flex justify-content-between">
+                        <div>
+                            <span><img src="../public/images/visa.png" alt="" width="100%" height="40px"></span>
+                            <span><img src="../public/images/master.jpg" alt="" width="100%" height="40px"></span>
+                        </div>
+
+                        <div>
+                            <span><img src="../public/images/amrri.png" alt="" width="100%" height="40px"></span>
+                            <span><img src="../public/images/Rupay-Cards-Big-1.jpg" alt="" width="100%"
+                                    height="40px"></span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal" id="ItemsShow">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Cart Items</h3>
+                            <button class="btn btn-close" id="btnCartItemClose"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-striped table-responsive table-hover">
+                                <thead>
+                                    <th>Preview</th>
+                                    <th>Product Id</th>
+                                    <th>Product Category</th>
+                                    <th>Product Price</th>
+
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" id="clos">Okay</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    </div>
+    <div class="text-center bg-warning p-1 mt-4 mb-2">
+        
+       <b> &copy; Copyright 2022</b> All Rights reserved. Developed by Pankaj. 
+    </div>
+    </div>
+
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+</body>
+
+</html>
